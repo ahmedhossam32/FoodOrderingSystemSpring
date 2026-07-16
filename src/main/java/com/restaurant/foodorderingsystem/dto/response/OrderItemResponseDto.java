@@ -7,25 +7,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderResponseDto {
+public class OrderItemResponseDto {
 
-    private Long id;
+    private Long mealId;
 
-    private Long customerId;
+    private String mealName;
 
-    private String customerName;
+    private Integer quantity;
 
-    private LocalDateTime orderDate;
+    private BigDecimal priceAtOrder;
 
-    private BigDecimal totalPrice;
-
-    private List<OrderItemResponseDto> items;
+    private BigDecimal subtotal;
 }

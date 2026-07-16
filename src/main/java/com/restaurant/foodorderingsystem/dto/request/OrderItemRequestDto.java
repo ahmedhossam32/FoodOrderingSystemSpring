@@ -1,7 +1,6 @@
 package com.restaurant.foodorderingsystem.dto.request;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,19 +8,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderRequestDto {
+public class OrderItemRequestDto {
 
     @NotNull
-    private Long customerId;
+    private Long mealId;
 
-    @NotEmpty
-    @Valid
-    private List<OrderItemRequestDto> items;
+    @NotNull
+    @Min(1)
+    private Integer quantity;
 }
