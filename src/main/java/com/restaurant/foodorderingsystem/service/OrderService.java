@@ -8,6 +8,7 @@ import com.restaurant.foodorderingsystem.entity.Customer;
 import com.restaurant.foodorderingsystem.entity.Meal;
 import com.restaurant.foodorderingsystem.entity.Order;
 import com.restaurant.foodorderingsystem.entity.OrderItem;
+import com.restaurant.foodorderingsystem.exception.ResourceNotFoundException;
 import com.restaurant.foodorderingsystem.repository.CustomerRepository;
 import com.restaurant.foodorderingsystem.repository.MealRepository;
 import com.restaurant.foodorderingsystem.repository.OrderRepository;
@@ -28,14 +29,14 @@ public class OrderService {
 
     public OrderResponseDto createOrder(OrderRequestDto request) {
         Customer customer = customerRepository.findById(request.getCustomerId())
-                .orElseThrow(() -> new RuntimeException("Customer not found with id: " + request.getCustomerId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + request.getCustomerId()));
 
         BigDecimal totalPrice = BigDecimal.ZERO;
         List<OrderItem> orderItems = new java.util.ArrayList<>();
 
         for (OrderItemRequestDto itemRequest : request.getItems()) {
             Meal meal = mealRepository.findById(itemRequest.getMealId())
-                    .orElseThrow(() -> new RuntimeException("Meal not found with id: " + itemRequest.getMealId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Meal not found with id: " + itemRequest.getMealId()));
 
             BigDecimal priceAtOrder = meal.getPrice();
 
@@ -64,7 +65,7 @@ public class OrderService {
 
     public OrderResponseDto getOrderById(Long id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
         return toResponseDto(order);
     }
 
@@ -76,7 +77,7 @@ public class OrderService {
 
     public void deleteOrder(Long id) {
         if (!orderRepository.existsById(id)) {
-            throw new RuntimeException("Order not found with id: " + id);
+            throw new ResourceNotFoundException("Order not found with id: " + id);
         }
         orderRepository.deleteById(id);
     }

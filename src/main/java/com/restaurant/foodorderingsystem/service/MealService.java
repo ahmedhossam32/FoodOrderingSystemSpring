@@ -3,6 +3,7 @@ package com.restaurant.foodorderingsystem.service;
 import com.restaurant.foodorderingsystem.dto.request.MealRequestDto;
 import com.restaurant.foodorderingsystem.dto.response.MealResponseDto;
 import com.restaurant.foodorderingsystem.entity.Meal;
+import com.restaurant.foodorderingsystem.exception.ResourceNotFoundException;
 import com.restaurant.foodorderingsystem.repository.MealRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class MealService {
 
     public MealResponseDto getMealById(Long id) {
         Meal meal = mealRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Meal not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Meal not found with id: " + id));
         return toResponseDto(meal);
     }
 
@@ -35,7 +36,7 @@ public class MealService {
 
     public MealResponseDto updateMeal(Long id, MealRequestDto request) {
         Meal existingMeal = mealRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Meal not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Meal not found with id: " + id));
 
         existingMeal.setName(request.getName());
         existingMeal.setDescription(request.getDescription());
@@ -48,7 +49,7 @@ public class MealService {
 
     public void deleteMeal(Long id) {
         if (!mealRepository.existsById(id)) {
-            throw new RuntimeException("Meal not found with id: " + id);
+            throw new ResourceNotFoundException("Meal not found with id: " + id);
         }
         mealRepository.deleteById(id);
     }

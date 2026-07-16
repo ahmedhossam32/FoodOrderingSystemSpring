@@ -3,6 +3,7 @@ package com.restaurant.foodorderingsystem.service;
 import com.restaurant.foodorderingsystem.dto.request.CustomerRequestDto;
 import com.restaurant.foodorderingsystem.dto.response.CustomerResponseDto;
 import com.restaurant.foodorderingsystem.entity.Customer;
+import com.restaurant.foodorderingsystem.exception.ResourceNotFoundException;
 import com.restaurant.foodorderingsystem.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class CustomerService {
 
     public CustomerResponseDto getCustomerById(Long id) {
         Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
         return toResponseDto(customer);
     }
 
@@ -35,7 +36,7 @@ public class CustomerService {
 
     public CustomerResponseDto updateCustomer(Long id, CustomerRequestDto request) {
         Customer existingCustomer = customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
 
         existingCustomer.setName(request.getName());
         existingCustomer.setEmail(request.getEmail());
@@ -48,7 +49,7 @@ public class CustomerService {
 
     public void deleteCustomer(Long id) {
         if (!customerRepository.existsById(id)) {
-            throw new RuntimeException("Customer not found with id: " + id);
+            throw new ResourceNotFoundException("Customer not found with id: " + id);
         }
         customerRepository.deleteById(id);
     }
